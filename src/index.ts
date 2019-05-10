@@ -13,7 +13,6 @@ const app = express()
 // middleware
 app.use(bodyParser.json())
 app.use(loggingMiddleware)
-app.use(defaultResponse)
 
 // routes
 app.use('/login', loginRouter)
@@ -21,6 +20,7 @@ app.use('/user', userRouter)
 app.use('/reimbursement', reimbursementRouter)
 
 // main loop
+app.use(defaultResponse)
 app.listen(PORT, ():void => {
   console.log(`app is running on port ${PORT}`)
 })
