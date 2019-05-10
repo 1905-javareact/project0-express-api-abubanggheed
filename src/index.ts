@@ -16,8 +16,8 @@ app.use(loggingMiddleware)
 
 // routes
 app.use('/login', loginRouter)
-app.use('/user', userRouter)
-app.use('/reimbursement', reimbursementRouter)
+app.use('/users', userRouter)
+app.use('/reimbursements', reimbursementRouter)
 
 // main loop
 app.use(defaultResponse)
