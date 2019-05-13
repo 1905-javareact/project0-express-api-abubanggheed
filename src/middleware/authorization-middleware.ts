@@ -3,10 +3,10 @@ import session from 'express-session'
 export const applyAuthorizations = (req, res, next) => {
   req.permissions = {
     id: 0, // id will be 0 if authorization fails
-    auths: []
+    role: ''
   }
   if(req.session && req.session.user) {
-    req.permissions.auths =  req.session.user.roles
+    req.permissions.role =  req.session.user.role
     req.permissions.id = req.session.user.id
   }
   next()

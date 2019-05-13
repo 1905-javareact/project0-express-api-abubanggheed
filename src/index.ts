@@ -19,8 +19,8 @@ app.use(applyAuthorizations)
 
 // routes
 app.use('/login', loginRouter)
-app.use('/users', [applyAuthorizations, userRouter])
-app.use('/reimbursements', [applyAuthorizations, reimbursementRouter])
+app.use('/users', userRouter)
+app.use('/reimbursements', reimbursementRouter)
 
 // setup express event
 app.use(defaultResponse)
