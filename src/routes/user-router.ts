@@ -16,7 +16,7 @@ router.get('/:id', (req, res) => {
   })
 })
 
-router.patch('/', (req, res) => {
+router.patch('', (req, res) => {
   if(req.body.id) {
     res.status(202)
     res.json({

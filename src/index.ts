@@ -5,6 +5,7 @@ import loginRouter from './routes/login-router'
 import userRouter from './routes/user-router'
 import reimbursementRouter from './routes/reimbursement-router'
 import { defaultResponse } from './middleware/default-middleware';
+import { applyAuthorizations } from './middleware/authorization-middleware';
 
 // module constants
 const PORT: number = 9050
@@ -16,10 +17,10 @@ app.use(loggingMiddleware)
 
 // routes
 app.use('/login', loginRouter)
-app.use('/users', userRouter)
-app.use('/reimbursements', reimbursementRouter)
+app.use('/users', [applyAuthorizations, userRouter])
+app.use('/reimbursements', [applyAuthorizations, reimbursementRouter])
 
-// main loop
+// setup express event
 app.use(defaultResponse)
 app.listen(PORT, ():void => {
   console.log(`app is running on port ${PORT}`)
