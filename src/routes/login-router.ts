@@ -1,11 +1,12 @@
 import express from 'express'
 import { comparePassword } from '../strategies/authentication-strategy';
+import { users } from '../state';
 
 const router = express.Router()
 
 router.post('', (req, res) => {
   const {username, password} = req.body
-  const user = [].find(user => user.username === username)
+  const user = users.find(user => user.username === username)
   if(user && comparePassword(password, user.password)) {
     req.session.user = user
     res.send('You are logged in')

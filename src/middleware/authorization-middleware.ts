@@ -1,7 +1,6 @@
 import session from 'express-session'
 
 export const applyAuthorizations = (req, res, next) => {
-  console.log(req.session)
   req.permissions = {
     id: 0, // id will be 0 if authorization fails
     auths: []
@@ -14,7 +13,7 @@ export const applyAuthorizations = (req, res, next) => {
 }
 
 const sessionConfig = {
-  secret: process.env.SERVER_SESSION_SECERET,
+  secret: process.env.SERVER_SESSION_SECERET || 'secret',
   cookie: { secure: false },
   resave: false,
   saveUninitialized: false
