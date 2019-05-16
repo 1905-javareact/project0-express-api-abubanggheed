@@ -1,5 +1,8 @@
+CREATE SCHEMA reimbursement_api;
 
 BEGIN;
+
+SET SCHEMA 'reimbursement_api';
 
 DROP TABLE IF EXISTS "role";
 DROP TABLE IF EXISTS "user";
@@ -24,7 +27,7 @@ CREATE TABLE "user" (
   "first_name" TEXT NOT NULL,
   "last_name" TEXT NOT NULL,
   "email" TEXT NOT NULL UNIQUE,
-  "role_id" NUMERIC REFERENCES "role"("id")
+  "role_id" INT REFERENCES "role"("id")
 );
 
 CREATE TABLE "reimbursement_status" (
@@ -50,14 +53,14 @@ INSERT INTO "reimbursement_type" ("type") VALUES
 
 CREATE TABLE "reimbursement" (
   "id" SERIAL PRIMARY KEY,
-  "author" NUMERIC REFERENCES "user"("id"),
+  "author" INT REFERENCES "user"("id"),
   "amount" MONEY NOT NULL,
   "date_submitted" DATE DEFAULT NOW(),
   "date_resolved" DATE DEFAULT NULL,
   "description" TEXT NOT NULL,
-  "resolver" NUMERIC REFERENCES "user"("id") DEFAULT NULL,
-  "status" NUMERIC REFERENCES "reimbursement_status"("id") DEFAULT 1,
-  "type" NUMERIC REFERENCES "reimbursement_type"("id") DEFAULT 4
+  "resolver" INT REFERENCES "user"("id") DEFAULT NULL,
+  "status" INT REFERENCES "reimbursement_status"("id") DEFAULT 1,
+  "type" INT REFERENCES "reimbursement_type"("id") DEFAULT 4
 );
 
 COMMIT;

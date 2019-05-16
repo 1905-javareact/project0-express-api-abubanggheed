@@ -1,4 +1,4 @@
 
 export default {
-  jwtSecret: process.env.SERVER_SESSION_SECERET || 'secret'
+  jwtSecret: process.env.SERVER_SECERET || 'secret'
 }
