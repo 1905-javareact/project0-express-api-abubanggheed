@@ -1,37 +1,26 @@
 import express from 'express'
 import { getAllUsersService, getUserByIdService, patchUserByBodyService } from '../services/user.service';
+import { checkRole, checkRoleAndId } from '../middleware/authorization-middleware';
 
 const router = express.Router()
 
-router.get('', async (req, res) => {
+router.get('', [checkRole('finance-manager'), async (req, res) => {
   try {
-    if (!['admin', 'finance-manager'].includes(req.permissions.role)) {
-      throw 'invalid credentials'
-    }
     let allUsers = await getAllUsersService()
     res.json(allUsers)
   } catch (error) {
     switch (error) {
-      case 'invalid credentials':
-        res.status(403)
-        res.send('you must be logged in as an administrator to access these resources')
-        break;
-
       default:
         res.status(500)
         res.send('server error')
         break;
     }
   }
-})
+}])
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', [checkRoleAndId('finance-manager'), async (req, res) => {
   try {
     let { id } = req.params
-    if (!['admin', 'finance-manager'].includes(req.permissions.role)
-      && +req.permissions.id !== +id) {
-      throw ('invalid credentials')
-    }
     let userToSend = await getUserByIdService(id)
     if(!userToSend) {
       throw 'user not found'
@@ -39,11 +28,6 @@ router.get('/:id', async (req, res) => {
     res.json(userToSend)
   } catch (error) {
     switch (error) {
-      case 'invalid credentials':
-        res.status(403)
-        res.send('You are not authorized to acces this information. Are you logged in?')
-        break;
-
       case 'user not found':
         res.status(404)
         res.send('this user does not exist')
@@ -55,9 +39,9 @@ router.get('/:id', async (req, res) => {
         break;
     }
   }
-})
+}])
 
-router.patch('', async (req, res) => {
+router.patch('', [checkRole('admin'), async (req, res) => {
   try {
     if(req.permissions.role !== 'admin') {
       throw 'invalid credentials'
@@ -87,6 +71,6 @@ router.patch('', async (req, res) => {
         break;
     }
   }
-})
+}])
 
 export default router
