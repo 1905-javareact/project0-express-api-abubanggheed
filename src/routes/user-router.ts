@@ -43,9 +43,6 @@ router.get('/:id', [checkRoleAndId('finance-manager'), async (req, res) => {
 
 router.patch('', [checkRole('admin'), async (req, res) => {
   try {
-    if(req.permissions.role !== 'admin') {
-      throw 'invalid credentials'
-    }
     if(!req.body.id) {
       throw 'no id'
     }
@@ -53,10 +50,6 @@ router.patch('', [checkRole('admin'), async (req, res) => {
     res.json(user)
   } catch (error) {
     switch (error) {
-      case 'invalid credentials':
-        res.status(403)
-        res.send('you must be logged in as an admin')
-        break;
       case 'no id':
         res.status(400)
         res.send('request body must contain an id')

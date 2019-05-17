@@ -6,9 +6,7 @@ import { getRoleIdByRoleName } from "../daos/role.dao";
 export const getAllUsersService = async () => {
   try {
     let allUsers = await getAllUsers()
-    return allUsers.map((user: UserDTO) => (
-      convertUserDTO(user)
-    ))
+    return allUsers.map(convertUserDTO)
   } catch (error) {
     throw error
   }
