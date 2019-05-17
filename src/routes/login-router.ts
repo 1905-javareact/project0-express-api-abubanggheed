@@ -1,30 +1,32 @@
 import express from 'express'
-import { comparePassword } from '../strategies/authentication-strategy';
-import { users } from '../state';
-import jwt from 'jsonwebtoken';
-import jwtConfig from '../jwtconfig';
+import { loginService } from '../services/login.service';
 
 const router = express.Router()
 
-router.post('', (req, res) => {
+router.post('', async (req, res) => {
   const { username, password } = req.body
-  const user = users.find(user => user.username === username)
-  if (user && password && comparePassword(password, user.password)) {
-    req.session.user = user
-    const token = jwt.sign({
-      userId: user.userId,
-      username: user.username,
-      role: user.role
-    },
-      jwtConfig.jwtSecret,
-      { expiresIn: '1h' })
-    res.send(token)
-  } else if (user && password) {
-    res.status(401)
-    res.send('the username and password do not match')
-  } else {
-    res.status(400)
-    res.send('invalid fields')
+  try {
+    const token = await loginService(username, password)
+    res.json(token)
+  } catch (error) {
+    switch (error) {
+      case 'wrong username':
+        res.status(400)
+        res.send({
+          message: 'a user by that username doesn\'t exist'
+        })
+        break;
+      case 'invalid credentials':
+        res.status(401)
+        res.send({
+          message: 'the username and password do not match'
+        })
+        break;
+      default:
+        console.log(error)
+        res.sendStatus(500)
+        break;
+    }
   }
 })
 

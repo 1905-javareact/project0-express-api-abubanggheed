@@ -6,7 +6,8 @@ export let userByUsernameQuery = `
 
 export let selectUsersQuery = `
   SELECT * FROM reimbursement_api."user" ORDER BY "id"
-  JOIN reimbursement_api."role" ON "user"."roleId" = "role"."id";
+  JOIN reimbursement_api."role" ON "user"."roleId" = "role"."id"
+  ORDER BY "user".id;
 `
 
 export let userByIdQuery = `
