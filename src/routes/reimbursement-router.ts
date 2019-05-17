@@ -1,6 +1,6 @@
 import express from 'express'
 import { checkRole } from '../middleware/authorization-middleware';
-import { getReimbursmentsByStatusService } from '../services/reimbursement.service';
+import { getReimbursmentsByStatusService, getReimbursmentsByUserIdService } from '../services/reimbursement.service';
 
 const router = express.Router()
 
@@ -19,13 +19,20 @@ router.get('/status/:statusId', [checkRole('finance-manager'), async (req, res) 
   }
 }])
 
-router.get('/author/userId/:userId', (req, res) => {
-  console.log(req.query)
-  res.json({
-    temp: ['reimbursement'],
-    permissions: ['finance-manager', 'user:userId']
-  })
-})
+router.get('/author/userId/:userId', [checkRole('finance-manager'), async (req, res) => {
+  try {
+    const reimbursements = await getReimbursmentsByUserIdService(req.params.userId)
+    res.json(reimbursements)
+  } catch (error) {
+    switch (error) {
+      default:
+        console.log(error)
+        res.status(500)
+        res.send('server error')
+        break;
+    }
+  }
+}])
 
 router.post('', (req, res) => {
   res.status(201)
