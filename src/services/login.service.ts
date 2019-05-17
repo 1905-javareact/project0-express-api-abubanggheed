@@ -8,7 +8,8 @@ export const loginService = async (username, password) => {
     const user = await getUserByUsername(username)
     if(comparePassword(password, user.password)) {
       return jwt.sign({
-        username: user.username
+        id: user.id,
+        role: user.role_name
       },
         jwtConfig.jwtSecret,
         { expiresIn: '1h' })
