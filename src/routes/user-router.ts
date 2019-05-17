@@ -1,5 +1,5 @@
 import express from 'express'
-import { getAllUsersService, getUserByIdService } from '../services/user.service';
+import { getAllUsersService, getUserByIdService, patchUserByBodyService } from '../services/user.service';
 
 const router = express.Router()
 
@@ -57,15 +57,35 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-router.patch('', (req, res) => {
-  if (req.body.id) {
-    res.status(202)
-    res.json({
-      temp: 'user (updated)',
-      permissions: ['finance-manager'],
-    })
-  } else {
-    res.sendStatus(400)
+router.patch('', async (req, res) => {
+  try {
+    if(req.permissions.role !== 'admin') {
+      throw 'invalid credentials'
+    }
+    if(!req.body.id) {
+      throw 'no id'
+    }
+    const user = await patchUserByBodyService(req.body)
+    res.json(user)
+  } catch (error) {
+    switch (error) {
+      case 'invalid credentials':
+        res.status(403)
+        res.send('you must be logged in as an admin')
+        break;
+      case 'no id':
+        res.status(400)
+        res.send('request body must contain an id')
+        break;
+      case 'no user':
+        res.status(404)
+        res.send('that user does not exist')
+      default:
+        console.log(error)
+        res.status(500)
+        res.send('server error')
+        break;
+    }
   }
 })
 
