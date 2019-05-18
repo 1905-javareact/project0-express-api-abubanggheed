@@ -36,3 +36,28 @@ export const getReimbursmentsByUserID = async userId => {
     client && client.release()
   }
 }
+
+export const postReimbursement = async newReiumbursement => {
+  let client: PoolClient
+  let { author, amount, description, type } = newReiumbursement
+  try {
+    client = await connectionPool.connect()
+    await client.query(`begin`)
+    const id = (await client.query(`
+      insert into reimbursement_api.reimbursement ("author", "amount", "description", "type")
+      values ($1, $2, $3, $4) returning id
+    `, [author, amount, description, type])).rows[0].id
+    await client.query(`commit`)
+    const postedReiumbursement = (await client.query(`
+    select reimbursement_info.*, "user".username as resolver_name from reimbursement_api.reimbursement_info
+    left join reimbursement_api."user" on "user".id = reimbursement_info.resolver
+    where reimbursement_info.id = $1
+    `, [id])).rows[0]
+    return postedReiumbursement
+  } catch (error) {
+    await client.query(`rollback`)
+    throw error
+  } finally {
+    client && client.release()
+  }
+}
