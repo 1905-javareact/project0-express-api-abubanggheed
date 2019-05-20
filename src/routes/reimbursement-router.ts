@@ -10,7 +10,7 @@ router.get('/status/:statusId', [checkRole('finance-manager'), async (req, res) 
     if(limit > 100) {
       limit = 100
     }
-    const reimbursements = await getReimbursmentsByStatusService(req.params.statusId, start, end, limit, offset)
+    const reimbursements = await getReimbursmentsByStatusService(req.params.statusId, start, end, limit || 100, offset || 0)
     res.json(reimbursements)
   } catch (error) {
     switch (error) {
@@ -29,7 +29,7 @@ router.get('/author/userId/:id', [checkRoleAndId('finance-manager'), async (req,
     if(limit > 100) {
       limit = 100
     }
-    const reimbursements = await getReimbursmentsByUserIdService(req.params.id, start, end, limit, offset)
+    const reimbursements = await getReimbursmentsByUserIdService(req.params.id, start, end, limit || 100, offset || 0)
     res.json(reimbursements)
   } catch (error) {
     switch (error) {

@@ -10,7 +10,7 @@ router.get('', [checkRole('finance-manager'), async (req, res) => {
     if(limit > 100 || isNaN(limit)) {
       limit = 100
     }
-    let allUsers = await getAllUsersService(limit, offset)
+    let allUsers = await getAllUsersService(limit || 100, offset || 0)
     res.json(allUsers)
   } catch (error) {
     switch (error) {
