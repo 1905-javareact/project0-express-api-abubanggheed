@@ -3,7 +3,7 @@ BEGIN;
 
 -- all passwords are hashed from 'password'
 INSERT INTO reimbursement_api."user" (username, "password", first_name, last_name, email, role_id) values
-('godmode','$2a$10$9Gob83Rzothq6Hw4yVHSOOhnAaDvIyeNozjzGRTjGWTdYTxErSRQa',
+('thegreatone','$2a$10$9Gob83Rzothq6Hw4yVHSOOhnAaDvIyeNozjzGRTjGWTdYTxErSRQa',
 'Ad', 'Min', 'admin@cia.gov', 1),
 ('fanny', '$2a$10$9Gob83Rzothq6Hw4yVHSOOhnAaDvIyeNozjzGRTjGWTdYTxErSRQa',
 'Finny', 'Ants', 'finnyants@manager.coffee', 2),
