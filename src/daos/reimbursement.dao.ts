@@ -6,15 +6,15 @@ select reimbursement_info.*, "user".username as resolver_name from reimbursement
 left join reimbursement_api."user" on "user".id = reimbursement_info.resolver
 `
 
-export const getReimbursmentsByStatus = async (status, start, end) => {
+export const getReimbursmentsByStatus = async (status, start, end, limit, offset) => {
   let client: PoolClient
   try {
     client = await connectionPool.connect()
     const reimbursements = (await client.query(`
     ${joinResolverToInfoQuery}
     where status_id = $1 and date_submitted between $2 and $3
-    order by date_submitted;
-    `, [status, start, end])).rows
+    order by date_submitted limit $4 offset $5;
+    `, [status, start, end, limit, offset])).rows
     return reimbursements
   } catch (error) {
     throw error
@@ -23,15 +23,15 @@ export const getReimbursmentsByStatus = async (status, start, end) => {
   }
 }
 
-export const getReimbursmentsByUserID = async (userId, start, end) => {
+export const getReimbursmentsByUserID = async (userId, start, end, limit, offset) => {
   let client: PoolClient
   try {
     client = await connectionPool.connect()
     const reimbursements = (await client.query(`
     ${joinResolverToInfoQuery}
     where author_id = $1 and date_submitted between $2 and $3
-    order by date_submitted;
-    `, [userId, start, end])).rows
+    order by date_submitted limit $4 offset $5
+    `, [userId, start, end, limit, offset])).rows
     return reimbursements
   } catch (error) {
     throw error

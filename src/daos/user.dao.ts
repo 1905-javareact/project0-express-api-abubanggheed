@@ -6,16 +6,17 @@ select "user".id, username, first_name, last_name, email, role_name from reimbur
 join reimbursement_api."role" on "user".role_id = "role".id
 `
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (limit, offset) => {
   let client: PoolClient
   try {
     client = await connectionPool.connect()
     let result = (await client.query(`
     ${selectUserQuery}
-    order by "user".id;
-    `)).rows
+    order by "user".id limit $1 offset $2;
+    `, [limit, offset])).rows
     return result
   } catch (error) {
+    console.log(error)
     throw error
   } finally {
     client && client.release()

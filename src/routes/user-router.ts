@@ -6,7 +6,11 @@ const router = express.Router()
 
 router.get('', [checkRole('finance-manager'), async (req, res) => {
   try {
-    let allUsers = await getAllUsersService()
+    let { limit, offset } = req.query
+    if(limit > 100 || isNaN(limit)) {
+      limit = 100
+    }
+    let allUsers = await getAllUsersService(limit, offset)
     res.json(allUsers)
   } catch (error) {
     switch (error) {

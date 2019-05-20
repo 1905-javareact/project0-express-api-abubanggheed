@@ -2,18 +2,18 @@ import { getReimbursmentsByStatus, getReimbursmentsByUserID, postReimbursement, 
 import { reimbursementDTO } from "../dtos/reimbursement.dto";
 import { convertReimbursementDTO } from "../strategies/reimbursement-conversion";
 
-export const getReimbursmentsByStatusService = async (statusId, start, end) => {
+export const getReimbursmentsByStatusService = async (statusId, start, end, limit, offset) => {
   try {
-    const reimbursements:reimbursementDTO[] = await getReimbursmentsByStatus(statusId, start, end)
+    const reimbursements:reimbursementDTO[] = await getReimbursmentsByStatus(statusId, start, end, limit, offset)
     return reimbursements.map(convertReimbursementDTO)
   } catch (error) {
     throw error
   }
 }
 
-export const getReimbursmentsByUserIdService = async (userId, start, end) => {
+export const getReimbursmentsByUserIdService = async (userId, start, end, limit, offset) => {
   try {
-    const reimbursements:reimbursementDTO[] = await getReimbursmentsByUserID(userId, start, end)
+    const reimbursements:reimbursementDTO[] = await getReimbursmentsByUserID(userId, start, end, limit, offset)
     return reimbursements.map(convertReimbursementDTO)
   } catch (error) {
     throw error

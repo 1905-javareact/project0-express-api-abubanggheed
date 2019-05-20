@@ -3,9 +3,9 @@ import { UserDTO } from "../dtos/user.dto";
 import { convertUserDTO } from "../strategies/user-conversion";
 import { getRoleIdByRoleName } from "../daos/role.dao";
 
-export const getAllUsersService = async () => {
+export const getAllUsersService = async (limit, offset) => {
   try {
-    let allUsers = await getAllUsers()
+    let allUsers = await getAllUsers(limit, offset)
     return allUsers.map(convertUserDTO)
   } catch (error) {
     throw error
