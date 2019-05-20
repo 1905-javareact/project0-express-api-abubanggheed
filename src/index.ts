@@ -16,10 +16,10 @@ const app = express()
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(loggingMiddleware)
-app.use(applyAuthorizations)
 
 // routes
 app.use('/login', loginRouter)
+app.use(applyAuthorizations)
 app.use('/users', userRouter)
 app.use('/reimbursements', reimbursementRouter)
 

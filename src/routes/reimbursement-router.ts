@@ -1,6 +1,6 @@
 import express from 'express'
 import { checkRole, checkRoleAndId } from '../middleware/authorization-middleware';
-import { getReimbursmentsByStatusService, getReimbursmentsByUserIdService, postReimbursementService } from '../services/reimbursement.service';
+import { getReimbursmentsByStatusService, getReimbursmentsByUserIdService, postReimbursementService, patchReimbursementService } from '../services/reimbursement.service';
 
 const router = express.Router()
 
@@ -66,16 +66,31 @@ router.post('', [checkRole('employee'), async (req, res) => {
   }
 }])
 
-router.patch('', (req, res) => {
-  if(req.body.id) {
-    res.status(202)
-    res.json({
-      temp: 'reimbursement',
-      permissions: ['finance-manager']
-    })
-  } else {
-    res.sendStatus(400)
+router.patch('', [ checkRole('finance-manager'), async (req, res) => {
+try {
+  let reimbursementData = {
+    ...req.body,
+    id: req.body.reimbursementId,
+    user: req.permissions.id
   }
-})
+  if(!reimbursementData.id) {
+    throw 'missing id'
+  }
+  const patchedReimbursement = await patchReimbursementService(reimbursementData)
+  res.json(patchedReimbursement)
+} catch (error) {
+  switch (error) {
+    case 'missing id':
+      res.status(400)
+      res.send('cannot recognize the reimbursement id from the body of this request')
+      break;
+  
+    default:
+      res.status(500)
+      res.send('server error')
+      break;
+  }
+}
+}])
 
 export default router

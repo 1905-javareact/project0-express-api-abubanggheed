@@ -14,8 +14,9 @@ export const applyAuthorizations = (req, res, next) => {
     }
   } catch (error) {
     console.log(error)
+  } finally {
+    next()
   }
-  next()
 }
 
 const roles = ['employee', 'finance-manager', 'admin']
