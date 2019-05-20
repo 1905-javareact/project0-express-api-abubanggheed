@@ -86,7 +86,7 @@ export const updateReimbursement = async reimbursement => {
     if(!newReimbursement[5] && (oldReimbursement.status === 1 &&
       newReimbursement[6] !== 1)) {
         newReimbursement[5] = user
-        newReimbursement[3] = new Date()
+        newReimbursement[3] = new Date() // dev-ops issue: timezone
     }
     await client.query(`begin`)
     await client.query(`

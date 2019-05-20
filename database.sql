@@ -64,7 +64,7 @@ CREATE TABLE "reimbursement" (
 );
 create view reimbursement_api.reimbursement_info as
 select reimbursement.id, author as author_id, "user".username as author,
-amount, date_submitted, date_resolved, description, resolver,
+amount, date_submitted, date_resolved, "description", resolver,
 reimbursement_status.id as status_id, reimbursement_status."status",
 reimbursement_type.id as type_id, reimbursement_type."type"
 from reimbursement_api.reimbursement

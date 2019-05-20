@@ -1,13 +1,17 @@
 import { PoolClient } from "pg";
 import { connectionPool } from ".";
 
+const selectUserQuery = `
+select "user".id, username, first_name, last_name, email, role_name from reimbursement_api."user"
+join reimbursement_api."role" on "user".role_id = "role".id
+`
+
 export const getAllUsers = async () => {
   let client: PoolClient
   try {
     client = await connectionPool.connect()
     let result = (await client.query(`
-    select "user".id, username, first_name, last_name, email, role_name from reimbursement_api."user"
-    join reimbursement_api."role" on "user".role_id = "role".id
+    ${selectUserQuery}
     order by "user".id;
     `)).rows
     return result
@@ -23,8 +27,7 @@ export const getUserById = async id => {
   try {
     client = await connectionPool.connect()
     let result = (await client.query(`
-    select "user".id, username, first_name, last_name, email, role_name from reimbursement_api."user"
-    join reimbursement_api."role" on "user".role_id = "role".id
+    ${selectUserQuery}
     where "user".id = $1;
     `, [id])).rows[0]
     return result
