@@ -4,6 +4,7 @@ BEGIN;
 
 SET SCHEMA 'reimbursement_api';
 
+DROP VIEW IF EXISTS "reimbursement_info";
 DROP TABLE IF EXISTS "role";
 DROP TABLE IF EXISTS "user";
 DROP TABLE IF EXISTS "reimbursement_status";

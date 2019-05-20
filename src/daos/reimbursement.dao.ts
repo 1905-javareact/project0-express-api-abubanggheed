@@ -17,6 +17,7 @@ export const getReimbursmentsByStatus = async (status, start, end, limit, offset
     `, [status, start, end, limit, offset])).rows
     return reimbursements
   } catch (error) {
+    console.log(error)
     throw error
   } finally {
     client && client.release()
@@ -34,6 +35,7 @@ export const getReimbursmentsByUserID = async (userId, start, end, limit, offset
     `, [userId, start, end, limit, offset])).rows
     return reimbursements
   } catch (error) {
+    console.log(error)
     throw error
   } finally {
     client && client.release()
@@ -57,7 +59,8 @@ export const postReimbursement = async newReiumbursement => {
     `, [id])).rows[0]
     return postedReiumbursement
   } catch (error) {
-    await client.query(`rollback`)
+    client && await client.query(`rollback`)
+    console.log(error)
     throw error
   } finally {
     client && client.release()
@@ -101,7 +104,7 @@ export const updateReimbursement = async reimbursement => {
     `, [id])).rows[0]
     return updatedReimbursement
   } catch (error) {
-    client && client.query(`rollback`)
+    client && await client.query(`rollback`)
     console.log(error)
     throw error
   }

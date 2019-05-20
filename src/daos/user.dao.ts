@@ -33,6 +33,7 @@ export const getUserById = async id => {
     `, [id])).rows[0]
     return result
   } catch (error) {
+    console.log(error)
     throw error
   } finally {
     client && client.release()
@@ -54,7 +55,8 @@ export const patchUserByFields = async fields => {
     await client.query(`commit`)
     return updatedUser
   } catch (error) {
-    await client && client.query(`rollback`)
+    client && await client.query(`rollback`)
+    console.log(error)
     throw error
   } finally {
     client && client.release()
