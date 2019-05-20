@@ -6,15 +6,15 @@ select reimbursement_info.*, "user".username as resolver_name from reimbursement
 left join reimbursement_api."user" on "user".id = reimbursement_info.resolver
 `
 
-export const getReimbursmentsByStatus = async status => {
+export const getReimbursmentsByStatus = async (status, start, end) => {
   let client: PoolClient
   try {
     client = await connectionPool.connect()
     const reimbursements = (await client.query(`
     ${joinResolverToInfoQuery}
-    where status_id = $1
+    where status_id = $1 and date_submitted between $2 and $3
     order by date_submitted;
-    `, [status])).rows
+    `, [status, start, end])).rows
     return reimbursements
   } catch (error) {
     throw error
@@ -23,15 +23,15 @@ export const getReimbursmentsByStatus = async status => {
   }
 }
 
-export const getReimbursmentsByUserID = async userId => {
+export const getReimbursmentsByUserID = async (userId, start, end) => {
   let client: PoolClient
   try {
     client = await connectionPool.connect()
     const reimbursements = (await client.query(`
     ${joinResolverToInfoQuery}
-    where author_id = $1
+    where author_id = $1 and date_submitted between $2 and $3
     order by date_submitted;
-    `, [userId])).rows
+    `, [userId, start, end])).rows
     return reimbursements
   } catch (error) {
     throw error
@@ -86,7 +86,7 @@ export const updateReimbursement = async reimbursement => {
     if(!newReimbursement[5] && (oldReimbursement.status === 1 &&
       newReimbursement[6] !== 1)) {
         newReimbursement[5] = user
-        newReimbursement[3] = new Date() // dev-ops issue: timezone
+        newReimbursement[3] = 'now()' // dev-ops issue: timezone
     }
     await client.query(`begin`)
     await client.query(`

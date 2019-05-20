@@ -6,7 +6,8 @@ const router = express.Router()
 
 router.get('/status/:statusId', [checkRole('finance-manager'), async (req, res) => {
   try {
-    const reimbursements = await getReimbursmentsByStatusService(req.params.statusId)
+    const { start, end } = req.query
+    const reimbursements = await getReimbursmentsByStatusService(req.params.statusId, start, end)
     res.json(reimbursements)
   } catch (error) {
     switch (error) {
@@ -21,7 +22,7 @@ router.get('/status/:statusId', [checkRole('finance-manager'), async (req, res) 
 
 router.get('/author/userId/:id', [checkRoleAndId('finance-manager'), async (req, res) => {
   try {
-    const reimbursements = await getReimbursmentsByUserIdService(req.params.id)
+    const reimbursements = await getReimbursmentsByUserIdService(req.params.id, req.query.start, req.query.end)
     res.json(reimbursements)
   } catch (error) {
     switch (error) {
