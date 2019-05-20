@@ -107,5 +107,7 @@ export const updateReimbursement = async reimbursement => {
     client && await client.query(`rollback`)
     console.log(error)
     throw error
+  } finally {
+    client && client.release()
   }
 }
