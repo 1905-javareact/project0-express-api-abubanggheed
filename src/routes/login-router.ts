@@ -7,7 +7,7 @@ router.post('', async (req, res) => {
   const { username, password } = req.body
   try {
     const token = await loginService(username, password)
-    res.cookie('x-access-token', {
+    res.cookie('y-access-head', {
       val: token})
     res.send('you are logged in')
   } catch (error) {

@@ -6,7 +6,7 @@ export const applyAuthorizations = (req, res, next) => {
     id: 0, // id will be 0 if authorization fails
     role: ''
   }
-  let token = req.cookies['x-access-token'] || req.cookies['authorization']
+  let token = req.cookies['y-access-head'] || req.cookies['authorization']
   try {
     let credentials = token && jwt.verify(token.val, jwtconfig.jwtSecret)
     if (credentials) {
