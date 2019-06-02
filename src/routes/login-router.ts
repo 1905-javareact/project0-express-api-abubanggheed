@@ -6,10 +6,11 @@ const router = express.Router()
 router.post('', async (req, res) => {
   const { username, password } = req.body
   try {
-    const token = await loginService(username, password)
+    const { token, self } = await loginService(username, password)
     res.cookie('y-access-head', {
-      val: token})
-    res.send('you are logged in')
+      val: token
+    })
+    res.json(self)
   } catch (error) {
     switch (error) {
       case 'wrong username':

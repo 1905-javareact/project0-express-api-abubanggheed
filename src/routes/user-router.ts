@@ -22,6 +22,33 @@ router.get('', [checkRole('finance-manager'), async (req, res) => {
   }
 }])
 
+router.get('/self', async (req, res) => {
+  try {
+    let { id } = req.permissions
+    if(!id) {
+      throw 'not logged in'
+    }
+    let selfToSend = await getUserByIdService(id)
+    if(!selfToSend) {
+      throw 'user doesnt exist'
+    }
+    res.json(selfToSend)
+  } catch (error) {
+    switch (error) {
+      case 'not logged in':
+        res.sendStatus(204)
+        break;
+      case 'user doesnt exist':
+        res.status(404).send({
+          message: 'that user does not exist anymore'
+        })
+      default:
+        res.sendStatus(500)
+        break;
+    }
+  }
+})
+
 router.get('/:id', [checkRoleAndId('finance-manager'), async (req, res) => {
   try {
     let { id } = req.params

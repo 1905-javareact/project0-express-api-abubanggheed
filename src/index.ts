@@ -7,6 +7,7 @@ import userRouter from './routes/user-router'
 import reimbursementRouter from './routes/reimbursement-router'
 import { defaultResponse } from './middleware/default-middleware';
 import { applyAuthorizations } from './middleware/authorization-middleware';
+import { corsFilter } from './middleware/cors-filter-middleware';
 
 // module constants
 const PORT: number = 9050
@@ -15,6 +16,7 @@ const app = express()
 // middleware
 app.use(bodyParser.json())
 app.use(cookieParser())
+app.use(corsFilter)
 app.use(loggingMiddleware)
 
 // routes

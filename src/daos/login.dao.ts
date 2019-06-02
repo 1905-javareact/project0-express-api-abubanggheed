@@ -6,9 +6,9 @@ export const getUserByUsername = async (username) => {
   try {
     client = await connectionPool.connect()
     let result = (await client.query(`
-      SELECT username, "password", "user".id, "role".role_name FROM reimbursement_api."user"
-      JOIN reimbursement_api."role" ON "user".role_id = "role".id
-      WHERE username = $1
+    select "user".id, username, password, first_name, last_name, email, role_name from reimbursement_api."user"
+    join reimbursement_api."role" on "user".role_id = "role".id
+    where username = $1
     `, [username])).rows
     if(result.length) {
       return result[0]
