@@ -33,4 +33,11 @@ router.post('', async (req, res) => {
   }
 })
 
+router.delete('/', (req, res) => {
+  if (req.cookies) {
+    res.clearCookie('y-access-head')
+  }
+  res.sendStatus(205)
+})
+
 export default router
