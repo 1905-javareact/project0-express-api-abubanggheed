@@ -22,7 +22,7 @@ router.get('', [checkRole('finance-manager'), async (req, res) => {
   }
 }])
 
-router.get('/self', async (req, res) => {
+router.get('/self', async (req:any, res) => {
   try {
     let { id } = req.permissions
     if(!id) {

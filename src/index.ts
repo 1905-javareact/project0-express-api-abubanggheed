@@ -10,7 +10,7 @@ import { applyAuthorizations } from './middleware/authorization-middleware';
 import { corsFilter } from './middleware/cors-filter-middleware';
 
 // module constants
-const PORT: number = 9050
+const PORT: number =  +process.env.PORT || 9050
 const app = express()
 
 // middleware
