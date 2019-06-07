@@ -13,7 +13,7 @@ export const getReimbursmentsByStatus = async (status, start, end, limit, offset
     const reimbursements = (await client.query(`
     ${joinResolverToInfoQuery}
     where status_id = $1 and date_submitted between $2 and $3
-    order by date_submitted limit $4 offset $5;
+    order by date_submitted desc limit $4 offset $5;
     `, [status, start, end, limit, offset])).rows
     return reimbursements
   } catch (error) {
@@ -31,7 +31,7 @@ export const getReimbursmentsByUserID = async (userId, start, end, limit, offset
     const reimbursements = (await client.query(`
     ${joinResolverToInfoQuery}
     where author_id = $1 and date_submitted between $2 and $3
-    order by date_submitted limit $4 offset $5
+    order by date_submitted desc limit $4 offset $5
     `, [userId, start, end, limit, offset])).rows
     return reimbursements
   } catch (error) {
@@ -86,6 +86,9 @@ export const updateReimbursement = async reimbursement => {
       status || oldReimbursement.status,
       type || oldReimbursement.type
     ]
+    if(newReimbursement[0] === newReimbursement[5]) {
+      throw 'updating own reimbursement'
+    }
     if(!newReimbursement[5] && (oldReimbursement.status === 1 &&
       newReimbursement[6] !== 1)) {
         newReimbursement[5] = user

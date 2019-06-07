@@ -92,6 +92,9 @@ try {
       res.status(400)
       res.send('cannot recognize the reimbursement id from the body of this request')
       break;
+    
+      case 'updating own reimbursement':
+        res.sendStatus(403)
   
     default:
       res.status(500)
