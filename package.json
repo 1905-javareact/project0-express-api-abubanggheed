@@ -36,9 +36,9 @@
   "homepage": "https://github.com/1905-javareact/project0-express-api-abubanggheed#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.4",
-    "express": "^4.16.4",
+    "express": "^4.18.2",
     "express-session": "^1.16.1",
     "jsonwebtoken": "^8.5.1",
     "pg": "^7.11.0"
